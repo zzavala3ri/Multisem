@@ -28,7 +28,11 @@ SECRET_KEY = 'django-insecure-guo7_+9s(2&a-#u-560u0%^vpxdz9_aom6tx2cj+6of_bg+xck
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'multisem.onrender.com',
+    'multisem.org',
+    'www.multisem.org'
+]
 
 
 # Application definition
