@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+
+<style>
+body {
+    font-family: Arial;
+    padding: 40px;
+    background: #f3f4f6;
+}
+
+/* HEADER */
+.header {
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 3px solid #2563eb;
+}
+
+.title {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.subtitle {
+    color: #666;
+    font-size: 12px;
+}
+
+/* CARDS */
+.card {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 20px;
+    box-shadow: 0px 2px 8px rgba(0,0,0,0.05);
+}
+
+/* GRID */
+.grid {
+    display: flex;
+    gap: 15px;
+}
+
+.box {
+    flex: 1;
+    padding: 15px;
+    border-radius: 6px;
+    text-align: center;
+    background: #f9fafb;
+}
+
+/* BADGES */
+.badge {
+    padding: 5px 10px;
+    border-radius: 4px;
+    color: white;
+    font-weight: bold;
+}
+
+.si, .bueno { background: #16a34a; }
+.no, .malo { background: #dc2626; }
+.regular { background: #f59e0b; }
+
+/* ROW */
+.row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+/* FALLAS */
+.fail {
+    background: #fee2e2;
+    padding: 10px;
+    margin-bottom: 8px;
+    border-left: 5px solid red;
+}
+
+/* FOOTER */
+.footer {
+    margin-top: 40px;
+    font-size: 12px;
+    color: #666;
+}
+
+.row:hover {
+    background: #f1f5f9;
+}
+
+.card {
+    border-left: 5px solid #2563eb;
+}
+
+.title {
+    color: #111827;
+}
+</style>
+
+</head>
+<body>
+
+<!-- 🔥 HEADER (PRIMERO SIEMPRE) -->
+ 
+<div class="header">
+
+    <div style="display:flex; align-items:center; justify-content:space-between;">
+
+        <div style="display:flex; align-items:center; gap:15px;">
+            <img src="{{ STATIC_ROOT }}/logo.png" width="70">
+            <div style="text-align:right;">
+            <div><b>Técnico:</b> {{ diagnostico.tecnico }}</div>
+            <div><b>Marca:</b> {{ diagnostico.marca }}</div>
+            <div><b>Modelo:</b> {{ diagnostico.modelo }}</div>
+            <div><b>Fecha:</b> {{ diagnostico.fecha_prueba|date:"d/m/Y H:i" }}</div>
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="card">
+    <div class="grid">
+
+        <div class="box">
+            <div>Estado general</div>
+            <b>{{ diagnostico.estructura }}</b>
+        </div>
+
+        <div class="box">
+            <div>Arranque</div>
+            <b>{{ diagnostico.arranca }}</b>
+        </div>
+
+        <div class="box">
+            <div>Condición crítica</div>
+            <b>{{ fallas|length }} fallas</b>
+        </div>
+
+    </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="card">
+    <div class="grid">
+
+        <div class="box">
+            <div>Score</div>
+            <b>{{ score }}/10</b>
+        </div>
+
+        <div class="box">
+            <div>Fallas</div>
+            <b>{{ fallas|length }}</b>
+        </div>
+
+        <div class="box">
+            <div>Estado</div>
+            <b>{{ diagnostico.estructura }}</b>
+        </div>
+
+    </div>
+</div>
+<!-- FALLAS -->
+{% if fallas %}
+<div class="card">
+    <b>Fallas detectadas</b>
+
+    {% for f in fallas %}
+    <div class="fail">
+        {{ f }}
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<div class="card">
+    <b>Diagnóstico técnico</b>
+
+    <div class="row">
+        <div>¿El generador cuenta con placas legibles?</div>
+        <div class="badge {{ diagnostico.placas }}">{{ diagnostico.placas }}</div>
+    </div>
+
+    <div class="row">
+        <div>¿Condición del aceite del motor?</div>
+        <div class="badge {{ diagnostico.nivel_aceite }}">{{ diagnostico.nivel_aceite }}</div>
+    </div>
+
+    <div class="row">
+        <div>Ruido / vibración detectada</div>
+        <div>{{ diagnostico.ruido }}</div>
+    </div>
+
+    <div class="row">
+        <div>Lectura del horómetro</div>
+        <div>{{ diagnostico.horometro }}</div>
+    </div>
+
+    <div class="row">
+        <div>Sistema de enfriamiento</div>
+        <div class="badge {{ diagnostico.enfriamiento }}">{{ diagnostico.enfriamiento }}</div>
+    </div>
+
+    <div class="row">
+        <div>Fecha prueba automática</div>
+        <div>{{ diagnostico.fecha_prueba }}</div>
+    </div>
+
+    <div class="row">
+        <div>Estado general estructura</div>
+        <div class="badge {{ diagnostico.estructura }}">{{ diagnostico.estructura }}</div>
+    </div>
+
+    <div class="row">
+        <div>Puntos críticos de oxidación</div>
+        <div>{{ diagnostico.oxidacion }}</div>
+    </div>
+
+    <div class="row">
+        <div>Estado del cableado eléctrico</div>
+        <div class="badge {{ diagnostico.cableado }}">{{ diagnostico.cableado }}</div>
+    </div>
+
+    <div class="row">
+        <div>Estado del tablero </div>
+        <div class="badge {{ diagnostico.tablero }}">{{ diagnostico.tablero }}</div>
+    </div>
+
+    <div class="row">
+        <div>Nivel y aspecto del aceite</div>
+        <div class="badge {{ diagnostico.aceite }}">{{ diagnostico.aceite }}</div>
+    </div>
+
+    <div class="row">
+        <div>Estado del filtro de aceite</div>
+        <div class="badge {{ diagnostico.filtro_aceite }}">{{ diagnostico.filtro_aceite }}</div>
+    </div>
+
+    <div class="row">
+        <div>Estado del filtro de aire</div>
+        <div class="badge {{ diagnostico.filtro_aire }}">{{ diagnostico.filtro_aire }}</div>
+    </div>
+
+    <div class="row">
+        <div>Estado del filtro de combustible</div>
+        <div class="badge {{ diagnostico.filtro_combustible }}">{{ diagnostico.filtro_combustible }}</div>
+    </div>
+
+    <div class="row">
+        <div>Estado del sistema de escape</div>
+        <div class="badge {{ diagnostico.escape }}">{{ diagnostico.escape }}</div>
+    </div>
+
+    <div class="row">
+        <div>Estado de la batería</div>
+        <div class="badge {{ diagnostico.bateria }}">{{ diagnostico.bateria }}</div>
+    </div>
+
+    <div class="row">
+        <div>¿Arranca el motor?</div>
+        <div class="badge {{ diagnostico.arranca }}">{{ diagnostico.arranca }}</div>
+    </div>
+    <div style="margin-top:25px; padding:15px; border:1px solid #ddd; border-radius:10px;">
+    <h4 style="margin-bottom:10px;">📝 Observaciones del Técnico</h4>
+
+    {% if diagnostico.informacion_extra %}
+        <p style="white-space: pre-line;">
+            {{ diagnostico.informacion_extra }}
+        </p>
+    {% else %}
+        <p style="color:#888;">Sin observaciones registradas</p>
+    {% endif %}
+</div>
+
+</div>
+
+<!-- FOTO -->
+{% if imagen %}
+<div style="margin-top:30px;">
+    
+    <div style="font-weight:bold; margin-bottom:10px;">
+        Fotografía del equipo
+    </div>
+
+    <div style="
+        border:1px solid #ddd; 
+        padding:15px; 
+        border-radius:12px; 
+        text-align:center;
+        background:#fafafa;
+    ">
+        <img src="{{ imagen }}" style="
+            max-width:100%;
+            max-height:300px;
+            object-fit:cover;
+            border-radius:10px;
+        ">
+    </div>
+
+</div>
+{% endif %}
+
+<!-- FOOTER -->
+<div class="footer">
+    Fecha: {{ diagnostico.fecha_prueba }}<br>
+    MULTISEM - Reporte técnico profesional
+</div>
+
+</body>
+</html>
